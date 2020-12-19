@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.Schedules;
 import java.time.LocalDateTime;
 
 @Configuration
-//@EnableScheduling
+@EnableScheduling
 public class Scheduler {
 
     Logger logger = LoggerFactory.getLogger(Scheduler.class);
