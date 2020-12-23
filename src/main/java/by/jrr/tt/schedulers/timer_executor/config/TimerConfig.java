@@ -2,6 +2,8 @@ package by.jrr.tt.schedulers.timer_executor.config;
 
 import by.jrr.tt.schedulers.timer_executor.service.LockCleaner;
 import by.jrr.tt.schedulers.timer_executor.service.MyTimerTaskFactory;
+import by.jrr.tt.schedulers.timer_executor.service.ServiceToTask;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,6 +16,13 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class TimerConfig {
+
+    final
+    ServiceToTask serviceToTask;
+
+    public TimerConfig(ServiceToTask serviceToTask) {
+        this.serviceToTask = serviceToTask;
+    }
 
     @Bean
     public Timer timer() {
@@ -38,7 +47,12 @@ public class TimerConfig {
                 3000,
                 4000);
 
-        return new Timer("myTimer");
+        timer.scheduleAtFixedRate(
+                jobFactory().wrapInTask(serviceToTask),
+                3000,
+                4000);
+
+        return timer;
     }
 
     @Bean
